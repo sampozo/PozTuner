@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro Tuner</title>
+    <style>
+        :root {
+            --bg-deep: #000000;
+            --card-bg: #111111;
+            --primary-gradient: linear-gradient(90deg, #ff1e7e 0%, #ffaa1d 100%);
+            --esmeralda: #2ecc71;
+            --ambar: #ffbf00;
+            --rosa: #ff1e7e;
+            --text-gray: #888;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--bg-deep);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Orbe sutil de fondo */
+        .glow {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(46, 204, 113, 0.15) 0%, transparent 70%);
+            bottom: 10%;
+            left: -10%;
+            z-index: 0;
+        }
+
+        .app-container {
+            position: relative;
+            width: 90%;
+            max-width: 400px;
+            height: 85vh;
+            background-color: var(--card-bg);
+            border-radius: 40px;
+            border: 1px solid #222;
+            display: flex;
+            flex-direction: column;
+            padding: 30px;
+            box-sizing: border-box;
+            z-index: 1;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+            font-weight: 300;
+        }
+
+        .logo span {
+            font-weight: 800;
+        }
+
+        /* Selector de Afinación Estilo Imagen */
+        select {
+            background-color: #1a1a1a;
+            color: white;
+            border: 1px solid #333;
+            padding: 15px;
+            border-radius: 15px;
+            width: 100%;
+            font-size: 1rem;
+            appearance: none;
+            margin-bottom: 40px;
+            outline: none;
+        }
+
+        /* Medidor SVG */
+        #meter {
+            width: 100%;
+            height: 200px;
+            margin-top: 20px;
+        }
+
+        .needle {
+            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-origin: 150px 140px;
+        }
+
+        .note-display {
+            font-size: 5rem;
+            font-weight: 800;
+            text-align: center;
+            margin: 20px 0;
+            min-height: 1.2em;
+        }
+
+        .freq-display {
+            text-align: center;
+            font-family: monospace;
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            margin-bottom: 40px;
+        }
+
+        /* Indicadores de Cuerdas Circulares */
+        .strings-container {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: auto;
+            margin-bottom: 40px;
+        }
+
+        .string-dot {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 1px solid #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: white;
+            background: rgba(255,255,255,0.03);
+            transition: all 0.3s ease;
+        }
+
+        .string-active {
+            background: var(--esmeralda);
+            box-shadow: 0 0 15px rgba(46, 204, 113, 0.4);
+            border-color: transparent;
+            color: black;
+            font-weight: bold;
+        }
+
+        /* Botón Principal */
+        .btn-start {
+            background: var(--primary-gradient);
+            border: none;
+            color: white;
+            padding: 20px;
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 1rem;
+            cursor: pointer;
+            width: 100%;
+            letter-spacing: 1px;
+            transition: transform 0.1s;
+        }
+
+        .btn-start:active {
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="glow"></div>
+
+    <div class="app-container">
+        <header>
+            <div class="logo">PRO <span>TUNER</span></div>
+        </header>
+
+        <select id="tuningSelect"></select>
+
+        <svg id="meter" viewBox="0 0 300 150">
+            <path d="M40,140 A110,110 0 0,1 260,140" fill="none" stroke="#222" stroke-width="12" stroke-linecap="round"/>
+            <path d="M125,48 A110,110 0 0,1 175,48" fill="none" stroke="var(--esmeralda)" stroke-width="6" stroke-linecap="round"/>
+            
+            <line id="needle" class="needle" x1="150" y1="140" x2="150" y2="35" stroke="var(--ambar)" stroke-width="4" stroke-linecap="round" />
+            <circle cx="150" cy="140" r="4" fill="white" />
+        </svg>
+
+        <div class="note-display" id="noteName">-</div>
+        <div class="freq-display" id="frequency">0.00 Hz</div>
+
+        <div class="strings-container" id="stringsBox"></div>
+
+        <button class="btn-start" id="startBtn">ACTIVAR MICRÓFONO</button>
+    </div>
+
+<script>
+    const tuningsData = {
+        standard: { name: "Estándar (E A D G B E)", notes: ['E2', 'A2', 'D3', 'G3', 'B3', 'E4'] },
+        dropD: { name: "Drop D", notes: ['D2', 'A2', 'D3', 'G3', 'B3', 'E4'] },
+        openG: { name: "Open G", notes: ['D2', 'G2', 'D3', 'G3', 'B3', 'D4'] },
+        dadgad: { name: "DADGAD", notes: ['D2', 'A2', 'D3', 'G3', 'A3', 'D4'] },
+        openD: { name: "Open D", notes: ['D2', 'A2', 'D3', 'F#3', 'A3', 'D4'] },
+        halfStepDown: { name: "Half Step Down", notes: ['Eb2', 'Ab2', 'Db3', 'Gb3', 'Bb3', 'Eb4'] },
+        dropC: { name: "Drop C", notes: ['C2', 'G2', 'C3', 'F3', 'A3', 'D4'] },
+        openE: { name: "Open E", notes: ['E2', 'B2', 'E3', 'G#3', 'B3', 'E4'] },
+        doubleDropD: { name: "Double Drop D", notes: ['D2', 'A2', 'D3', 'G3', 'B3', 'D4'] }
+    };
+
+    const noteFreqs = {
+        "C2": 65.41, "C#2": 69.30, "Db2": 69.30, "D2": 73.42, "D#2": 77.78, "Eb2": 77.78, "E2": 82.41, "F2": 87.31, "F#2": 92.50, "Gb2": 92.50, "G2": 98.00, "G#2": 103.83, "Ab2": 103.83, "A2": 110.00, "A#2": 116.54, "Bb2": 116.54, "B2": 123.47,
+        "C3": 130.81, "C#3": 138.59, "Db3": 138.59, "D3": 146.83, "D#3": 155.56, "Eb3": 155.56, "E3": 164.81, "F3": 174.61, "F#3": 185.00, "Gb3": 185.00, "G3": 196.00, "G#3": 207.65, "Ab3": 207.65, "A3": 220.00, "A#3": 233.08, "Bb3": 233.08, "B3": 246.94,
+        "C4": 261.63, "C#4": 277.18, "Db4": 277.18, "D4": 293.66, "D#4": 311.13, "Eb4": 311.13, "E4": 329.63, "F4": 349.23, "F#4": 369.99, "Gb4": 369.99, "G4": 392.00
+    };
+
+    const tSelect = document.getElementById('tuningSelect');
+    const sBox = document.getElementById('stringsBox');
+
+    function setup() {
+        for (let key in tuningsData) {
+            let opt = document.createElement('option');
+            opt.value = key;
+            opt.textContent = tuningsData[key].name;
+            tSelect.appendChild(opt);
+        }
+        initStrings();
+    }
+
+    function initStrings() {
+        sBox.innerHTML = '';
+        tuningsData[tSelect.value].notes.forEach(n => {
+            let dot = document.createElement('div');
+            dot.className = 'string-dot';
+            dot.textContent = n.replace(/\d/, '');
+            dot.dataset.note = n;
+            sBox.appendChild(dot);
+        });
+    }
+
+    tSelect.onchange = initStrings;
+    setup();
+
+    let audioCtx, analyzer, buf = new Float32Array(2048);
+
+    document.getElementById('startBtn').onclick = async function() {
+        try {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            audioCtx.createMediaStreamSource(stream).connect(analyzer = audioCtx.createAnalyser());
+            this.style.display = 'none';
+            update();
+        } catch(e) { alert("Micrófono no disponible"); }
+    };
+
+    function autoCorrelate(buf, sampleRate) {
+        let SIZE = buf.length, rms = 0;
+        for (let i=0; i<SIZE; i++) rms += buf[i]*buf[i];
+        if (Math.sqrt(rms/SIZE) < 0.01) return -1;
+
+        let c = new Float32Array(SIZE);
+        for (let i=0; i<SIZE; i++)
+            for (let j=0; j<SIZE-i; j++) c[i] += buf[j]*buf[j+i];
+
+        let d=0; while (c[d]>c[d+1]) d++;
+        let maxval=-1, maxpos=-1;
+        for (let i=d; i<SIZE; i++) if (c[i]>maxval) { maxval=c[i]; maxpos=i; }
+        return sampleRate/maxpos;
+    }
+
+    function update() {
+        analyzer.getFloatTimeDomainData(buf);
+        let pitch = autoCorrelate(buf, audioCtx.sampleRate);
+        
+        if (pitch !== -1) {
+            document.getElementById('frequency').textContent = pitch.toFixed(2) + " Hz";
+            
+            let closest = "", minD = Infinity;
+            const currentNotes = tuningsData[tSelect.value].notes;
+            
+            currentNotes.forEach(n => {
+                let d = Math.abs(pitch - noteFreqs[n]);
+                if (d < minD) { minD = d; closest = n; }
+            });
+
+            const cents = 1200 * Math.log2(pitch / noteFreqs[closest]);
+            let angle = Math.max(-50, Math.min(50, cents));
+            document.getElementById('needle').style.transform = `rotate(${angle}deg)`;
+
+            const isTuned = Math.abs(cents) < 3;
+            document.getElementById('noteName').textContent = closest.replace(/\d/, '');
+            document.getElementById('noteName').style.color = isTuned ? 'var(--esmeralda)' : 'white';
+
+            document.querySelectorAll('.string-dot').forEach(dot => {
+                dot.classList.toggle('string-active', dot.dataset.note === closest);
+            });
+        }
+        requestAnimationFrame(update);
+    }
+</script>
+</body>
+</html>

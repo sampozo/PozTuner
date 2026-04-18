@@ -1,0 +1,19 @@
+Actúa como un desarrollador de aplicaciones móviles Senior. He creado la estructura base y el diseño de la interfaz en el archivo diseño.html Tu objetivo es convertir esto en una aplicación móvil totalmente funcional para guitarristas, ya que la vamos a compilar en mi Github, quiero que cuando funcione, el afinador recoja correctamente por el micrófono el tono, que todos los apartados funcionen perfectamente y sin problemas de adaptabilidad. Revisa que las afinaciones esten correctas a la hora de detectar los tonos de la guitarra
+
+Quiero que revises se se puede mejorar o potenciar algo en el diseño, perfilando errores o mejorando algun aspecto
+
+
+Instrucciones a seguir paso a paso:
+
+Desarrolla toda la lógica interna (JavaScript, frameworks, gestión de estado) para que la aplicación cumpla su propósito de forma robusta.
+Estructura el proyecto adecuadamente para su compilación móvil (Capacitor).
+
+Una vez el código esté terminado, inicializa el repositorio Git y haz un commit con todos los archivos.
+
+Sube el código a mi repositorio remoto de GitHub , quiero que la apk tenga nombre al descargarla, no app-release o app-debug, sino que la app se llame PozTuner
+
+Configura un flujo de trabajo de GitHub Actions creando el archivo necesario en .github/workflows/. Este flujo debe estar diseñado para compilar el proyecto automáticamente y generar un archivo APK como artefacto final descargable.
+Avísame cuando hayas completado todos los pasos y el código esté subido e intentando compilar.
+
+
+Tienes acceso a mi git a traves del token que esta en el archivo github.txt

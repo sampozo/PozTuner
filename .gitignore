@@ -1,0 +1,10 @@
+node_modules
+dist
+.DS_Store
+*.local
+github.txt
+.vscode
+.idea
+android/app/build
+android/build
+# Capacitor assets are usually committed, but let's keep the core

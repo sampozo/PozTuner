@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>PozTuner</title>
+    <link rel="stylesheet" href="./src/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="bg-gradient"></div>
+    <div class="glow-orb" id="orb1"></div>
+    <div class="glow-orb" id="orb2"></div>
+
+    <main class="app-container">
+        <header>
+            <h1 class="logo">POZ<span>TUNER</span></h1>
+            <p class="subtitle">Precisión Profesional</p>
+        </header>
+
+        <section class="tuning-selector-wrapper">
+            <div class="custom-select">
+                <select id="tuningSelect">
+                    <!-- Options populated via JS -->
+                </select>
+                <div class="select-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                </div>
+            </div>
+        </section>
+
+        <section class="visualizer">
+            <svg class="meter-svg" viewBox="0 0 300 160">
+                <!-- Outer Arc -->
+                <path class="meter-bg" d="M40,150 A110,110 0 0,1 260,150" fill="none" stroke-width="10" stroke-linecap="round"/>
+                <!-- Target Area -->
+                <path class="meter-target" d="M135,45 A110,110 0 0,1 165,45" fill="none" stroke-width="6" stroke-linecap="round"/>
+                <!-- Cent Indicators -->
+                <g class="indicators">
+                    <line x1="150" y1="40" x2="150" y2="30" stroke="white" stroke-width="2" />
+                    <line x1="100" y1="65" x2="105" y2="70" stroke="rgba(255,255,255,0.2)" stroke-width="1" />
+                    <line x1="200" y1="65" x2="195" y2="70" stroke="rgba(255,255,255,0.2)" stroke-width="1" />
+                </g>
+                <!-- Needle -->
+                <g id="needleGroup" class="needle-group">
+                    <line class="needle" x1="150" y1="150" x2="150" y2="35" stroke-width="4" stroke-linecap="round" />
+                    <circle cx="150" cy="150" r="6" fill="white" />
+                </g>
+            </svg>
+
+            <div class="tuner-info">
+                <div class="note-display" id="noteName">--</div>
+                <div class="cents-display" id="centsText">0.00 cents</div>
+            </div>
+            
+            <div class="freq-display">
+                <span id="frequency">0.00 Hz</span>
+            </div>
+        </section>
+
+        <section class="strings-ui">
+            <div class="strings-grid" id="stringsBox">
+                <!-- Dots populated via JS -->
+            </div>
+        </section>
+
+        <footer>
+            <button class="btn-primary" id="startBtn">
+                <span class="btn-glow"></span>
+                <span class="btn-text">INICIAR AFINADOR</span>
+            </button>
+        </footer>
+    </main>
+
+    <script type="module" src="./src/main.js"></script>
+</body>
+</html>
