@@ -158,6 +158,13 @@ function update() {
         const isTuned = Math.abs(cents) < 5;
         noteNameEl.textContent = closest.replace(/\d/, '');
         noteNameEl.style.color = isTuned ? 'var(--accent)' : 'white';
+        
+        const needleLine = needleGroup.querySelector('.needle');
+        if (isTuned) {
+            needleLine.classList.add('needle-tuned');
+        } else {
+            needleLine.classList.remove('needle-tuned');
+        }
 
         // Update dot
         document.querySelectorAll('.string-dot').forEach(dot => {
