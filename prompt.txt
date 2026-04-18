@@ -1,19 +1,28 @@
-Actúa como un desarrollador de aplicaciones móviles Senior. He creado la estructura base y el diseño de la interfaz en el archivo diseño.html Tu objetivo es convertir esto en una aplicación móvil totalmente funcional para guitarristas, ya que la vamos a compilar en mi Github, quiero que cuando funcione, el afinador recoja correctamente por el micrófono el tono, que todos los apartados funcionen perfectamente y sin problemas de adaptabilidad. Revisa que las afinaciones esten correctas a la hora de detectar los tonos de la guitarra
+Actúa como un Desarrollador de Aplicaciones Móviles Senior. Tu objetivo es transformar el diseño base proporcionado en un archivo HTML en una aplicación móvil profesional de alta precisión para guitarristas, optimizada para su compilación con Capacitor y automatización en GitHub.
 
-Quiero que revises se se puede mejorar o potenciar algo en el diseño, perfilando errores o mejorando algun aspecto
+### Requisitos Técnicos y de Lógica:
+1.  **Algoritmo de Afinación Robusto:** No utilices una autocorrelación simple. Implementa una lógica de afinación profesional (preferiblemente el algoritmo **YIN**) para garantizar una detección de tono estable y precisa que ignore armónicos y ruido ambiental.
+2.  **Procesamiento de Audio:** Configura el Web Audio API para capturar el micrófono con alta resolución (buffer de 4096 o superior) y desactiva el procesamiento automático del navegador (cancelación de eco/ruido) para obtener la señal más pura del instrumento.
+3.  **Gestión de Permisos:** Es OBLIGATORIO declarar explícitamente los permisos `android.permission.RECORD_AUDIO` y `android.permission.MODIFY_AUDIO_SETTINGS` en el archivo `android/app/src/main/AndroidManifest.xml` para garantizar que el móvil solicite acceso al micrófono.
+4.  **Pantalla Activa (WakeLock):** Implementa la API `navigator.wakeLock` (o un plugin de Capacitor equivalente) para asegurar que la pantalla del teléfono no se apague mientras el afinador esté activado.
 
+### Diseño y Experiencia de Usuario (Premium):
+1.  **Aestética Senior:** Mejora el diseño base utilizando principios de **Glassmorphism**, capas con efectos de desenfoque (backdrop-filter), orbes de luz dinámicos y tipografía moderna (ej. Google Fonts 'Outfit' o 'JetBrains Mono').
+2.  **Feedback Visual Avanzado:**
+    *   Crea un efecto de **brillo/glow verde** en la aguja cuando el usuario alcance la afinación perfecta.
+    *   Implementa una **animación de pulso** en la cuerda que esté siendo afinada para guiar al usuario.
+    *   Asegura que el diseño sea totalmente adaptativo y respete las áreas seguras (`safe-area-inset`) de los móviles modernos.
 
-Instrucciones a seguir paso a paso:
+### Estructura y GitHub:
+1.  **README Profesional:** Genera automáticamente un archivo `README.md` detallado en el repositorio que incluya descripción, características, guías de compilación y badges de estado.
+2.  **Automatización (CI/CD):** Configura un flujo de trabajo de GitHub Actions en `.github/workflows/` para compilar el proyecto automáticamente al hacer push a `main`. El archivo APK generado debe ser cargado como un artefacto descargable con el nombre personalizado **PozTuner.apk**.
+3.  **Git:** Inicializa el repositorio y realiza los commits necesarios utilizando el token proporcionado.
 
-Desarrolla toda la lógica interna (JavaScript, frameworks, gestión de estado) para que la aplicación cumpla su propósito de forma robusta.
-Estructura el proyecto adecuadamente para su compilación móvil (Capacitor).
+### Flujo de Trabajo:
+- Analiza el HTML de diseño proporcionado.
+- Estructura el proyecto con Vite y Capacitor.
+- Implementa la lógica y los estilos mejorados.
+- Sincroniza con el repositorio remoto y asegura que la primera compilación en la nube sea exitosa.
 
-Una vez el código esté terminado, inicializa el repositorio Git y haz un commit con todos los archivos.
-
-Sube el código a mi repositorio remoto de GitHub , quiero que la apk tenga nombre al descargarla, no app-release o app-debug, sino que la app se llame PozTuner
-
-Configura un flujo de trabajo de GitHub Actions creando el archivo necesario en .github/workflows/. Este flujo debe estar diseñado para compilar el proyecto automáticamente y generar un archivo APK como artefacto final descargable.
-Avísame cuando hayas completado todos los pasos y el código esté subido e intentando compilar.
-
-
-Tienes acceso a mi git a traves del token que esta en el archivo github.txt
+---
+**IMPORTANTE:** El resultado debe ser una app lista para el usuario final, sin errores de permisos y con una fluidez que transmita calidad profesional.
