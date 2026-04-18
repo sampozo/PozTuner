@@ -18,7 +18,7 @@ const noteFreqs = {
 };
 
 // State
-let audioCtx, analyzer, detector, stream;
+let audioCtx, analyzer, detector, stream, wakeLock;
 let currentTuning = 'standard';
 let isRunning = false;
 
@@ -88,6 +88,16 @@ async function startTuner() {
 
         detector = new PitchDetector(audioCtx.sampleRate, 4096);
         
+        // Request Wake Lock
+        if ('wakeLock' in navigator) {
+            try {
+                wakeLock = await navigator.wakeLock.request('screen');
+                console.log("Wake Lock activo");
+            } catch (err) {
+                console.error(`${err.name}, ${err.message}`);
+            }
+        }
+
         isRunning = true;
         startBtn.querySelector('.btn-text').textContent = "DETENER";
         startBtn.classList.add('active');
@@ -107,6 +117,14 @@ function stopTuner() {
     if (audioCtx) {
         audioCtx.close();
     }
+
+    if (wakeLock) {
+        wakeLock.release().then(() => {
+            wakeLock = null;
+            console.log("Wake Lock liberado");
+        });
+    }
+
     startBtn.querySelector('.btn-text').textContent = "INICIAR AFINADOR";
     startBtn.classList.remove('active');
     
